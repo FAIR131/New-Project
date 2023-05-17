@@ -23,7 +23,7 @@ const nestedRouteItems = ref([
 <template>
   <div class="grid">
     <div class="col-12">
-            <div class="card card-w-title">
+            <div class="card card-w-title mb-3">
                 <TabMenu :model="nestedRouteItems" />
                 <router-view />
             </div>
