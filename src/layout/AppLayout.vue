@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed} from 'vue';
 import AppTopbar from './AppTopbar.vue';
-import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import { useLayout } from '@/layout/composables/layout';
 
@@ -31,7 +30,6 @@ const containerClass = computed(() => {
             <div class="layout-main">
                 <router-view></router-view>
             </div>
-            <app-footer></app-footer>
         </div>
         <div class="layout-mask"></div>
     </div>

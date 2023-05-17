@@ -61,7 +61,7 @@ const isOutsideClicked = (event: { target: Node | null; }) => {
 <template>
     <div class="layout-topbar">
         <div class="layout-topbar-logo">
-            <span>SAKAI</span>
+            <img src="@/../public/layout/topLogo.jpg" alt="LOGO">
         </div>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">

@@ -33,17 +33,6 @@ const props = defineProps<{
   id: string;
 }>();
 
-/* const chartLabel = computed(() => {
- return props.dataset2.map((item) => {
-    if (item === 0) {
-      return "25%";
-    } else {
-      return "";
-    }
-  });
-});
-console.log(chartLabel.value);
- */
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = ComposeOption<
@@ -125,15 +114,6 @@ const option: ECOption = {
       },
     },
   ],
-  /*   tooltip: {
-    trigger: "axis",
-    textStyle: {
-      color: "red",
-    },
-    formatter: function () {
-      return "超负荷25%";
-    },
-  }, */
 };
 
 // 新建一个promise对象
