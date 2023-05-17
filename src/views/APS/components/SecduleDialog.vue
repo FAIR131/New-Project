@@ -3,7 +3,6 @@ import type { IColums, IDatas, ILinks } from "@/types/APS/ScheduleManagement";
 import { gantt } from "dhtmlx-gantt";
 import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
 import ScheduleManagementChart from "../components/ScheduleManagementChart.vue";
-import Dialog from "primevue/dialog";
 const data: IDatas[] = [
   {
     id: 1,
@@ -162,42 +161,20 @@ const BOMId = "BOM";
 const frontRoadId = "frontRoad";
 const backRoadId = "backRoad";
 
-import { ref } from "vue";
+onMounted(()=>{
+    gantt.init("gantt_here");
+    gantt.config.xml_date = "%Y-%m-%d";
+    gantt.config.columns = gantColumns;
+    gantt.parse({ data, links });
+})
 
-const visible = ref(false);
 
-const handleShowDialog = () => {
-  // visible.value = true;
-  gantt.init("gantt_here");
-  gantt.config.xml_date = "%Y-%m-%d";
-  gantt.config.columns = gantColumns;
-  gantt.parse({ data, links });
-};
+
 </script>
-
 <template>
-  <div class="grid p-fluid">
-    <div class="col-12">
-      <div class="mt-3">
-        <pre-Button
-          label="排程管理"
-          icon="pi pi-external-link"
-          @click="visible = true"
-        />
-        <!-- <Button label="Show" icon="pi pi-external-link" @click="visible = true" /> -->
-        <Dialog
-          v-model:visible="visible"
-          maximizable
-          modal
-          header="排程管理"
-          :style="{ width: '80vw' }"
-          @show="handleShowDialog"
-        >
-          <div id="gantt_here" class="h-30rem"></div>
-        </Dialog>
-      </div>
-    </div>
-    <div class="col-12 xl:col-6">
+       <div id="gantt_here" class="h-30rem mb-4"></div>
+       <div class="grid">
+       <div class="col-12 xl:col-4">
       <div class="card">
         <h5>出图</h5>
         <ScheduleManagementChart
@@ -208,7 +185,7 @@ const handleShowDialog = () => {
         />
       </div>
     </div>
-    <div class="col-12 xl:col-6">
+    <div class="col-12 xl:col-4">
       <div class="card">
         <h5>机架</h5>
         <ScheduleManagementChart
@@ -219,7 +196,7 @@ const handleShowDialog = () => {
         />
       </div>
     </div>
-    <div class="col-12 xl:col-6">
+    <div class="col-12 xl:col-4">
       <div class="card">
         <h5>BOM</h5>
         <ScheduleManagementChart
@@ -230,7 +207,7 @@ const handleShowDialog = () => {
         />
       </div>
     </div>
-    <div class="col-12 xl:col-6">
+    <div class="col-12 xl:col-4">
       <div class="card">
         <h5>前道</h5>
         <ScheduleManagementChart
@@ -241,7 +218,7 @@ const handleShowDialog = () => {
         />
       </div>
     </div>
-    <div class="col-12 xl:col-6">
+    <div class="col-12 xl:col-4">
       <div class="card">
         <h5>后道</h5>
         <ScheduleManagementChart
@@ -252,5 +229,5 @@ const handleShowDialog = () => {
         />
       </div>
     </div>
-  </div>
+    </div>
 </template>

@@ -133,5 +133,5 @@ newPromise.then(() => {
 </script>
 
 <template>
-  <div :id="props.id" style="width: 100%; height: 400px"></div>
+  <div :id="props.id" style="width: 100%; height:25vw"></div>
 </template>
