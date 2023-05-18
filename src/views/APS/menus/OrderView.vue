@@ -78,104 +78,141 @@ const tabalData: Ref<ITabalData[]> = ref([]);
           <pre-Column
             header="订单号"
             field="orderId"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
           <pre-Column
             header="机器号"
             field="nachineId"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
           <pre-Column
             header="型号"
             field="model"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
           <pre-Column
             header="数量"
             field="number"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
           <pre-Column
             header="要求交期"
             field="deadLine"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
           <pre-Column
             header="头数"
             field="Quantity"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
           <pre-Column
             header="帧数"
             field="framesNum"
-            style="min-width: 5rem"  class="text-600"
+            style="min-width: 5rem"
+            class="text-600"
           ></pre-Column>
-          <pre-Column header="制图" field="mapping" style="min-width: 5rem"  class="text-600">
+          <pre-Column
+            header="制图"
+            field="mapping"
+            style="min-width: 5rem"
+            class="text-600"
+          >
             <template #body="{ data }">
               <i
                 v-if="data.mapping === 1"
-                class="pi pi-check text-2xl text-green-600"
+                class="pi pi-check-circle text-2xl text-green-600"
               ></i>
               <i
                 v-else-if="data.mapping === 2"
-                class="pi pi-arrow-circle-right text-2xl text-green-600"
+                class="pi pi-fast-forward text-2xl text-blue-400"
               ></i>
-              <i v-else class="pi pi-ellipsis-h text-2xl text-bluegray-300"></i>
+              <i v-else class="pi pi-clock text-2xl text-bluegray-300"></i>
             </template>
           </pre-Column>
-          <pre-Column header="BOM" field="BOM" style="min-width: 5rem"  class="text-600">
+          <pre-Column
+            header="BOM"
+            field="BOM"
+            style="min-width: 5rem"
+            class="text-600"
+          >
             <template #body="{ data }">
               <i
                 v-if="data.BOM === 1"
-                class="pi pi-check text-2xl text-green-600"
+                class="pi pi-check-circle text-2xl text-green-600"
               ></i>
               <i
                 v-else-if="data.BOM === 2"
-                class="pi pi-arrow-circle-right text-2xl text-green-600"
+                class="pi pi-fast-forward text-2xl text-blue-400"
               ></i>
-              <i v-else class="pi pi-ellipsis-h text-2xl text-bluegray-300"></i>
+              <i v-else class="pi pi-clock text-2xl text-bluegray-300"></i>
             </template>
           </pre-Column>
-          <pre-Column header="毛坯" field="blank" style="min-width: 5rem"  class="text-600">
+          <pre-Column
+            header="毛坯"
+            field="blank"
+            style="min-width: 5rem"
+            class="text-600"
+          >
             <template #body="{ data }">
               <i
                 v-if="data.blank === 1"
-                class="pi pi-check text-2xl text-green-600"
+                class="pi pi-check-circle text-2xl text-green-600"
               ></i>
               <i
                 v-else-if="data.blank === 2"
-                class="pi pi-arrow-circle-right text-2xl text-green-600"
+                class="pi pi-fast-forward text-2xl text-blue-400"
               ></i>
-              <i v-else class="pi pi-ellipsis-h text-2xl text-bluegray-300"></i>
+              <i v-else class="pi pi-clock text-2xl text-bluegray-300"></i>
             </template>
           </pre-Column>
-          <pre-Column header="机架" field="frame" style="min-width: 5rem"  class="text-600">
+          <pre-Column
+            header="机架"
+            field="frame"
+            style="min-width: 5rem"
+            class="text-600"
+          >
             <template #body="{ data }">
               <i
                 v-if="data.frame === 1"
-                class="pi pi-check text-2xl text-green-600"
+                class="pi pi-check-circle text-2xl text-green-600"
               ></i>
               <i
                 v-else-if="data.frame === 2"
-                class="pi pi-arrow-circle-right text-2xl text-green-600"
+                class="pi pi-fast-forward text-2xl text-blue-400"
               ></i>
-              <i v-else class="pi pi-ellipsis-h text-2xl text-bluegray-300"></i>
+              <i v-else class="pi pi-clock text-2xl text-bluegray-300"></i>
             </template>
           </pre-Column>
-          <pre-Column header="油漆" field="paint" style="min-width: 5rem"  class="text-600">
+          <pre-Column
+            header="油漆"
+            field="paint"
+            style="min-width: 5rem"
+            class="text-600"
+          >
             <template #body="{ data }">
               <i
                 v-if="data.paint === 1"
-                class="pi pi-check text-2xl text-green-600"
+                class="pi pi-check-circle text-2xl text-green-600"
               ></i>
               <i
                 v-else-if="data.paint === 2"
-                class="pi pi-arrow-circle-right text-2xl text-green-600"
+                class="pi pi-fast-forward text-2xl text-blue-400"
               ></i>
-              <i v-else class="pi pi-ellipsis-h text-2xl text-bluegray-300"></i>
+              <i v-else class="pi pi-clock text-2xl text-bluegray-300"></i>
             </template>
           </pre-Column>
-          <pre-Column header="装配" field="assembly" style="min-width: 5rem"  class="text-600">
+          <pre-Column
+            header="装配"
+            field="assembly"
+            style="min-width: 5rem"
+            class="text-600"
+          >
             <template #body="{ data }">
               <ProgressBar
                 :value="data.assembly"
@@ -277,7 +314,7 @@ const tabalData: Ref<ITabalData[]> = ref([]);
           <pre-Column
             header="制图止"
             field="mapping_end"
-            style="min-width: 5rem;"
+            style="min-width: 5rem"
           >
           </pre-Column>
           <pre-Column header="BOM起" field="BOM_start" style="min-width: 5rem">
@@ -303,7 +340,7 @@ const tabalData: Ref<ITabalData[]> = ref([]);
           <pre-Column
             header="油漆起"
             field="paint_start"
-            style="min-width: 5rem;"
+            style="min-width: 5rem"
           >
           </pre-Column>
           <pre-Column header="油漆止" field="paint_end" style="min-width: 5rem">
@@ -328,8 +365,12 @@ const tabalData: Ref<ITabalData[]> = ref([]);
 
 <style lang="scss" scoped>
 .p-datatable {
-  :deep(.p-column-header-content){
-  justify-content: center;
+  :deep(.p-column-header-content) {
+    justify-content: center;
+  }
+
+  :deep(.p-datatable-tbody > tr > td) {
+    text-align: center;
   }
 }
 </style>

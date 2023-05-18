@@ -4,6 +4,8 @@ export interface IColums {
     align?: string;
     width: string;
     tree?: boolean;
+    editor?:any;
+    resize?:boolean
   }
   
   export interface IDatas {

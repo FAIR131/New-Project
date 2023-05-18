@@ -9,38 +9,38 @@ const data: IDatas[] = [
     OrderId: "ORDER01",
     machineId: "M01001",
     number: 1,
-    request_delivery: "2023-07-18",
+    request_delivery: "2023-06-10",
     text: "出图",
-    start_date: "20-06-2023",
-    end_date: "17-07-2023",
+    start_date: "23-05-2023",
+    end_date: "25-05-2023",
     open: true,
   },
   {
     id: 2,
     text: "机架",
-    start_date: "21-06-2023",
-    end_date: "23-06-2023",
+    start_date: "25-05-2023",
+    end_date: "27-05-2023",
     parent: 1,
   },
   {
     id: 3,
     text: "BOM",
-    start_date: "22-06-2023",
-    end_date: "27-06-2023",
+    start_date: "26-05-2023",
+    end_date: "27-05-2023",
     parent: 1,
   },
   {
     id: 4,
     text: "前道",
-    start_date: "24-06-2023",
-    end_date: "29-06-2023",
+    start_date: "28-05-2023",
+    end_date: "01-06-2023",
     parent: 1,
   },
   {
     id: 5,
     text: "后道",
-    start_date: "25-06-2023",
-    end_date: "28-06-2023",
+    start_date: "29-05-2023",
+    end_date: "03-06-2023",
     parent: 1,
   },
   {
@@ -48,38 +48,38 @@ const data: IDatas[] = [
     OrderId: "ORDER02",
     machineId: "M01002",
     number: 1,
-    request_delivery: "2023-06-30",
+    request_delivery: "2023-06-10",
     text: "出图",
-    start_date: "23-06-2023",
-    end_date: "25-06-2023",
+    start_date: "27-05-2023",
+    end_date: "29-05-2023",
     open: true,
   },
   {
     id: 7,
     text: "机架",
-    start_date: "24-06-2023",
-    end_date: "28-06-2023",
+    start_date: "29-05-2023",
+    end_date: "30-05-2023",
     parent: 6,
   },
   {
     id: 8,
     text: "BOM",
-    start_date: "29-06-2023",
-    end_date: "30-06-2023",
+    start_date: "01-06-2023",
+    end_date: "05-06-2023",
     parent: 6,
   },
   {
     id: 9,
     text: "前道",
-    start_date: "01-07-2023",
-    end_date: "05-07-2023",
+    start_date: "04-06-2023",
+    end_date: "07-06-2023",
     parent: 6,
   },
   {
     id: 10,
     text: "后道",
-    start_date: "03-07-2023",
-    end_date: "09-07-2023",
+    start_date: "08-06-2023",
+    end_date: "12-06-2023",
     parent: 6,
   },
 ];
@@ -95,7 +95,9 @@ const links: ILinks[] = [
   { id: 8, source: 9, target: 10, type: "0" },
 ];
 
-const gantColumns: IColums[] = [
+
+
+const gantColumns:IColums[] = [
   {
     name: "id",
     label: "ID",
@@ -137,18 +139,13 @@ const gantColumns: IColums[] = [
     label: "计划开始时间",
     align: "center",
     width: "80",
+    resize:true
   },
   {
     name: "end_date",
     label: "计划完工时间",
     align: "center",
     width: "80",
-  },
-
-  {
-    name: "add",
-    label: "",
-    width: "30",
   },
 ];
 
@@ -161,20 +158,57 @@ const BOMId = "BOM";
 const frontRoadId = "frontRoad";
 const backRoadId = "backRoad";
 
-onMounted(()=>{
-    gantt.init("gantt_here");
-    gantt.config.xml_date = "%Y-%m-%d";
-    gantt.config.columns = gantColumns;
-    gantt.parse({ data, links });
-})
 
+onMounted(() => {
+  // gantt.config.lightbox.resizeLightbox = true;
+
+  gantt.config.drag_move = true;
+
+
+  gantt.init("gantt_here");
+  gantt.config.xml_date = "%Y-%m-%d";
+  gantt.config.columns = gantColumns;
+  gantt.parse({ data, links });
+
+// 设置甘特图的时间范围和缩放级别
+gantt.config.start_date = gantt.date.date_part(new Date());
+gantt.config.end_date = gantt.date.add(gantt.config.start_date, 1, "month");
+
+/* 
+  gantt.config.layout = {
+    css: "gantt_container",
+    cols: [
+      {
+        width: 400,
+        min_width: 300,
+        rows: [
+          {
+            view: "grid",
+            scrollX: "gridScroll",
+            scrollable: true,
+            scrollY: "scrollVer",
+          },
+          { view: "scrollbar", id: "gridScroll", group: "horizontal" },
+        ],
+      },
+      { resizer: true, width: 1 },
+      {
+        rows: [
+          { view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer" },
+          { view: "scrollbar", id: "scrollHor", group: "horizontal" },
+        ],
+      },
+      { view: "scrollbar", id: "scrollVer" },
+    ],
+  }; */
+});
 
 
 </script>
 <template>
-       <div id="gantt_here" class="h-30rem mb-4"></div>
-       <div class="grid">
-       <div class="col-12 xl:col-4">
+  <div id="gantt_here" class="h-30rem mb-4"></div>
+  <div class="grid">
+    <div class="col-12 xl:col-4">
       <div class="card">
         <h5>出图</h5>
         <ScheduleManagementChart
@@ -229,5 +263,5 @@ onMounted(()=>{
         />
       </div>
     </div>
-    </div>
+  </div>
 </template>
