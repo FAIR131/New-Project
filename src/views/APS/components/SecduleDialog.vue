@@ -95,9 +95,7 @@ const links: ILinks[] = [
   { id: 8, source: 9, target: 10, type: "0" },
 ];
 
-
-
-const gantColumns:IColums[] = [
+const gantColumns: IColums[] = [
   {
     name: "id",
     label: "ID",
@@ -139,7 +137,7 @@ const gantColumns:IColums[] = [
     label: "计划开始时间",
     align: "center",
     width: "80",
-    resize:true
+    resize: true,
   },
   {
     name: "end_date",
@@ -158,55 +156,67 @@ const BOMId = "BOM";
 const frontRoadId = "frontRoad";
 const backRoadId = "backRoad";
 
+// 定义一个定时器变量
+var timer:any = null;
+
+// 定义一个防抖函数
+function debounce(func:Function, delay:number) {
+  return function(this:any) {
+    var context = this;
+    var args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      func.apply(context, args);
+    }, delay);
+  };
+}
+
+// 绑定事件处理函数
+gantt.attachEvent("onAfterTaskUpdate", debounce(function(id:number, task:IDatas){  
+  // 根据id找到数据源中对应的元素
+  let index = data.findIndex(item => item.id === id);
+  
+  if (index !== -1) {
+    // 更新数据源中的属性
+    data[index].start_date = task.start_date;
+    console.log(data[index].start_date);
+    console.log(task.start_date);
+    
+    data[index].start_date = task.start_date;
+    data[index].end_date = task.end_date;
+  }
+}, 500)); 
+
+
+watch(data,(newVal)=>{
+    console.log('212',newVal)
+  })
+
+
 
 onMounted(() => {
-  // gantt.config.lightbox.resizeLightbox = true;
 
   gantt.config.drag_move = true;
-
+  gantt.config.fit_tasks = true;
+  // gantt.config.grid_resize_columns = true; // 允许拖拉改变网格内部的列宽
 
   gantt.init("gantt_here");
   gantt.config.xml_date = "%Y-%m-%d";
   gantt.config.columns = gantColumns;
   gantt.parse({ data, links });
 
-// 设置甘特图的时间范围和缩放级别
-gantt.config.start_date = gantt.date.date_part(new Date());
-gantt.config.end_date = gantt.date.add(gantt.config.start_date, 1, "month");
+  // 设置甘特图的时间范围和缩放级别
+  gantt.config.start_date = gantt.date.date_part(new Date());
+  gantt.config.end_date = gantt.date.add(gantt.config.start_date, 1, "month");
 
-/* 
-  gantt.config.layout = {
-    css: "gantt_container",
-    cols: [
-      {
-        width: 400,
-        min_width: 300,
-        rows: [
-          {
-            view: "grid",
-            scrollX: "gridScroll",
-            scrollable: true,
-            scrollY: "scrollVer",
-          },
-          { view: "scrollbar", id: "gridScroll", group: "horizontal" },
-        ],
-      },
-      { resizer: true, width: 1 },
-      {
-        rows: [
-          { view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer" },
-          { view: "scrollbar", id: "scrollHor", group: "horizontal" },
-        ],
-      },
-      { view: "scrollbar", id: "scrollVer" },
-    ],
-  }; */
+
 });
 
+console.log( JSON.stringify( gantt.config.start_date));
 
 </script>
 <template>
-  <div id="gantt_here" class="h-30rem mb-4"></div>
+  <div id="gantt_here" class="w-full h-30rem mb-4"></div>
   <div class="grid">
     <div class="col-12 xl:col-4">
       <div class="card">
