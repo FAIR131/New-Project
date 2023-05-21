@@ -27,12 +27,13 @@ import type {
 import type { ComposeOption } from "echarts/core";
 
 const props = defineProps<{
-  dataset1: Array<number>;
-  dataset2: Array<number>;
-  dataset3: Array<number>;
+  num: Array<number>;
+  below: Array<number>;
+  over: Array<number>;
   id: string;
+  data: string[];
+  flag: boolean;
 }>();
-
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = ComposeOption<
@@ -60,25 +61,17 @@ echarts.use([
 
 const option: ECOption = {
   xAxis: {
-    data: [
-      "星期一",
-      "星期二",
-      "星期三",
-      "星期四",
-      "星期五",
-      "星期六",
-      "星期日",
-    ],
+    data: props.data,
   },
   yAxis: {},
   series: [
     {
-      data: props.dataset1,
+      data: props.num,
       type: "bar",
       stack: "x",
     },
     {
-      data: props.dataset2,
+      data: props.below,
       type: "bar",
       stack: "x",
       color: "green",
@@ -96,7 +89,7 @@ const option: ECOption = {
       },
     },
     {
-      data: props.dataset3,
+      data: props.over,
       type: "bar",
       stack: "x",
       color: "red",
@@ -116,22 +109,36 @@ const option: ECOption = {
   ],
 };
 
-// 新建一个promise对象
-let newPromise = new Promise<void>((resolve) => {
-  resolve();
-});
-//然后异步执行echarts的初始化函数
-newPromise.then(() => {
-  //	此dom为echarts图标展示dom
+let myChart: any = null;
+let timer: any = null;
+
+onMounted(() => {
   let chartDom = document.getElementById(props.id)!;
   window.addEventListener("resize", function () {
     myChart.resize();
   });
-  let myChart = echarts.init(chartDom);
+  myChart = echarts.init(chartDom);
   option && myChart.setOption(option);
+});
+
+timer = setInterval(() => {
+  window.addEventListener("resize", function () {
+    myChart.resize();
+  });
+  option && myChart.setOption(option);
+}, 600);
+
+/* watch(props.num, (newVal) => {
+  console.log(newVal);
+  refresh();
+});
+ */
+onBeforeUnmount(() => {
+  clearInterval(timer);
 });
 </script>
 
 <template>
-  <div :id="props.id" style="width: 100%; height:25vw"></div>
+  <div :id="props.id" style="width: 95%; height: 20vw"></div>
 </template>
+<style></style>

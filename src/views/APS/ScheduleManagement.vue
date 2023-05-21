@@ -8,7 +8,7 @@ const nestedRouteItems = ref([
     label: "订单视图",
     to: "/APS/ScheduleManagement",
   },
- /*  {
+  /*  {
     label: "排程",
     to: "/APS/ScheduleManagement/SecManagement",
   }, */
@@ -22,6 +22,16 @@ const nestedRouteItems = ref([
   },
 ]);
 const visible = ref(false);
+
+let flag: Ref<boolean> = ref(true);
+
+const handleMaximize = () => {
+  flag.value = false;
+};
+
+const handleUnmaximize = () => {
+  flag.value = true;
+};
 </script>
 <template>
   <div class="grid">
@@ -42,8 +52,10 @@ const visible = ref(false);
             modal
             header="新增排程"
             :style="{ width: '80vw' }"
+            @maximize="handleMaximize"
+            @unmaximize="handleUnmaximize"
           >
-            <SecduleDialog/>
+            <SecduleDialog :flag="flag" />
           </Dialog>
         </div>
       </div>

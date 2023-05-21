@@ -3,6 +3,10 @@ import type { IColums, IDatas, ILinks } from "@/types/APS/ScheduleManagement";
 import { gantt } from "dhtmlx-gantt";
 import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
 import ScheduleManagementChart from "../components/ScheduleManagementChart.vue";
+const props = defineProps<{
+  flag: boolean;
+}>();
+
 const data: IDatas[] = [
   {
     id: 1,
@@ -11,22 +15,22 @@ const data: IDatas[] = [
     number: 1,
     request_delivery: "2023-06-10",
     text: "出图",
-    start_date: "23-05-2023",
+    start_date: "19-05-2023",
     end_date: "25-05-2023",
     open: true,
   },
   {
     id: 2,
     text: "机架",
-    start_date: "25-05-2023",
+    start_date: "20-05-2023",
     end_date: "27-05-2023",
     parent: 1,
   },
   {
     id: 3,
     text: "BOM",
-    start_date: "26-05-2023",
-    end_date: "27-05-2023",
+    start_date: "21-05-2023",
+    end_date: "25-05-2023",
     parent: 1,
   },
   {
@@ -147,9 +151,9 @@ const gantColumns: IColums[] = [
   },
 ];
 
-const picChart1 = [5, 3, 5, 0, 6, 4, 3];
-const picChart2 = [0, 0, 0, 4, 0, 0, 0];
-const picChart3 = [2, 1, 1, 0, 2, 1, 1];
+const picNum: Ref<number[]> = ref([5, 0, 5]);
+const picBelow: Ref<number[]> = ref([0, 4, 0]);
+const picOver: Ref<number[]> = ref([2, 0, 1]);
 const picId = "pic";
 const frameId = "frame";
 const BOMId = "BOM";
@@ -157,48 +161,44 @@ const frontRoadId = "frontRoad";
 const backRoadId = "backRoad";
 
 // 定义一个定时器变量
-var timer:any = null;
+var timer: any = null;
 
 // 定义一个防抖函数
-function debounce(func:Function, delay:number) {
-  return function(this:any) {
+function debounce(func: Function, delay: number) {
+  return function (this: any) {
     var context = this;
     var args = arguments;
     clearTimeout(timer);
-    timer = setTimeout(function() {
+    timer = setTimeout(function () {
       func.apply(context, args);
     }, delay);
   };
 }
 
-// 绑定事件处理函数
-gantt.attachEvent("onAfterTaskUpdate", debounce(function(id:number, task:IDatas){  
-  // 根据id找到数据源中对应的元素
-  let index = data.findIndex(item => item.id === id);
-  
-  if (index !== -1) {
-    // 更新数据源中的属性
-    data[index].start_date = task.start_date;
-    console.log(data[index].start_date);
-    console.log(task.start_date);
-    
-    data[index].start_date = task.start_date;
-    data[index].end_date = task.end_date;
-  }
-}, 500)); 
+// 拖拉任务
+gantt.attachEvent(
+  "onAfterTaskUpdate",
+  debounce(function (id: number, task: IDatas) {
+    // 根据id找到数据源中对应的元素
+    let index = data.findIndex((item) => item.id === id);
 
+    if (index !== -1) {
+      // 更新数据源中的属性
+      data[index].start_date = task.start_date;
 
-watch(data,(newVal)=>{
-    console.log('212',newVal)
-  })
+      data[index].start_date = task.start_date;
+      data[index].end_date = task.end_date;
+    }
+  }, 500)
+);
 
-
+watch(data, (newVal) => {
+  console.log("212", newVal);
+});
 
 onMounted(() => {
-
   gantt.config.drag_move = true;
   gantt.config.fit_tasks = true;
-  // gantt.config.grid_resize_columns = true; // 允许拖拉改变网格内部的列宽
 
   gantt.init("gantt_here");
   gantt.config.xml_date = "%Y-%m-%d";
@@ -208,70 +208,153 @@ onMounted(() => {
   // 设置甘特图的时间范围和缩放级别
   gantt.config.start_date = gantt.date.date_part(new Date());
   gantt.config.end_date = gantt.date.add(gantt.config.start_date, 1, "month");
-
-
 });
 
-console.log( JSON.stringify( gantt.config.start_date));
+const xAxisArr: string[] = [];
 
+let day = new Date();
+
+const handleXAxis = () => {
+  for (let i = 0; i < 3; i++) {
+    const month = day.getMonth() + 1;
+    const date = day.getDate() + i;
+    const xAxis = month + "/" + date;
+    xAxisArr.push(xAxis);
+  }
+};
+handleXAxis();
+// console.log(day);
+
+let isMouseDown = false;
+document.addEventListener("mousedown", function () {
+  isMouseDown = true;
+});
+
+gantt.attachEvent(
+  "onGanttScroll",
+  debounce(function () {
+    if (isMouseDown) {
+      for (let i: number = 0; i < picNum.value.length; i++) {
+        picBelow.value[i] = Math.floor(Math.random() * 9) + 1;
+        if (picBelow.value[i] < 6) {
+          picNum.value[i] = picOver.value[i] = 0;
+        } else {
+          picBelow.value[i] = 0;
+          picNum.value[i] = Math.floor(Math.random() * 9) + 5;
+          picOver.value[i] = Math.floor(Math.random() * 3) + 1;
+        }
+      }
+    }
+  }, 500)
+);
+
+/*
+let countArr: number[] = [];
+const handleCount = (str: string) => {
+  let count = 0;
+  for (let i = 0; i < 3; i++) {
+    count = 0;
+    // day = new Date();
+    const dd = day.setDate(day.getDate() + i);
+    console.log("第" + i, dd);
+
+    data.forEach((item) => {
+      // 获得任务的时间起始
+      const startDateString = item.start_date.split("-").reverse().join("-");
+      const endDateString = item.end_date.split("-").reverse().join("-");
+      const startDateObj = new Date(startDateString).getTime();
+      const endDateObj = new Date(endDateString).getTime();
+      console.log(startDateObj);
+      console.log(endDateObj);
+
+      // console.log(day.setDate(day));
+
+      if (str === item.text) {
+        if (startDateObj < dd && dd < endDateObj) {
+          console.log(startDateObj < dd && dd < endDateObj);
+
+          count++;
+        }
+      }
+      console.log("count", count);
+    });
+    countArr.push(count);
+    console.log("countArr", countArr);
+  }
+};
+handleCount("出图");
+console.log("result", countArr);
+ */
 </script>
 <template>
   <div id="gantt_here" class="w-full h-30rem mb-4"></div>
   <div class="grid">
-    <div class="col-12 xl:col-4">
-      <div class="card">
+    <div class="mr-3" style="width: 18.5%">
+      <div class="card m-auto">
         <h5>出图</h5>
         <ScheduleManagementChart
           :id="picId"
-          :dataset1="picChart1"
-          :dataset2="picChart2"
-          :dataset3="picChart3"
+          :num="picNum"
+          :below="picBelow"
+          :over="picOver"
+          :data="xAxisArr"
         />
       </div>
     </div>
-    <div class="col-12 xl:col-4">
-      <div class="card">
+    <div class="mr-3" style="width: 18.5%">
+      <div class="card w-full">
         <h5>机架</h5>
         <ScheduleManagementChart
           :id="frameId"
-          :dataset1="picChart1"
-          :dataset2="picChart2"
-          :dataset3="picChart3"
+          :num="picNum"
+          :below="picBelow"
+          :over="picOver"
+          :data="xAxisArr"
+          :falg="props.flag"
         />
       </div>
     </div>
-    <div class="col-12 xl:col-4">
+    <div class="mr-3" style="width: 18.5%">
       <div class="card">
         <h5>BOM</h5>
         <ScheduleManagementChart
           :id="BOMId"
-          :dataset1="picChart1"
-          :dataset2="picChart2"
-          :dataset3="picChart3"
+          :num="picNum"
+          :below="picBelow"
+          :over="picOver"
+          :data="xAxisArr"
         />
       </div>
     </div>
-    <div class="col-12 xl:col-4">
+    <div class="mr-3" style="width: 18.5%">
       <div class="card">
         <h5>前道</h5>
         <ScheduleManagementChart
           :id="frontRoadId"
-          :dataset1="picChart1"
-          :dataset2="picChart2"
-          :dataset3="picChart3"
+          :num="picNum"
+          :below="picBelow"
+          :over="picOver"
+          :data="xAxisArr"
         />
       </div>
     </div>
-    <div class="col-12 xl:col-4">
+    <div style="width: 18.5%">
       <div class="card">
         <h5>后道</h5>
         <ScheduleManagementChart
           :id="backRoadId"
-          :dataset1="picChart1"
-          :dataset2="picChart2"
-          :dataset3="picChart3"
+          :num="picNum"
+          :below="picBelow"
+          :over="picOver"
+          :data="xAxisArr"
         />
       </div>
     </div>
   </div>
 </template>
+<style scoped>
+.card {
+  padding: 1rem;
+  margin: auto;
+}
+</style>
